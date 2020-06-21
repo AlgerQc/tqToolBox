@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.fntPage = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.fntPage);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(1, 0);
             this.tabControl1.Name = "tabControl1";
@@ -44,15 +44,15 @@
             this.tabControl1.Size = new System.Drawing.Size(886, 561);
             this.tabControl1.TabIndex = 0;
             // 
-            // tabPage1
+            // fntPage
             // 
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(878, 523);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.fntPage.Location = new System.Drawing.Point(4, 22);
+            this.fntPage.Name = "fntPage";
+            this.fntPage.Padding = new System.Windows.Forms.Padding(3);
+            this.fntPage.Size = new System.Drawing.Size(878, 535);
+            this.fntPage.TabIndex = 0;
+            this.fntPage.Text = "fntTool";
+            this.fntPage.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
@@ -72,6 +72,7 @@
             this.Controls.Add(this.tabControl1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControl1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -80,7 +81,7 @@
         #endregion
 
         private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage fntPage;
         private System.Windows.Forms.TabPage tabPage2;
     }
 }
