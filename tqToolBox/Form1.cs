@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace tqToolBox
@@ -23,8 +16,8 @@ namespace tqToolBox
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string formClass = "tqToolBox.fntTool";
-            GenerateForm(formClass, tabControl1);
+            //string formClass = "tqToolBox.fntTool";
+            //GenerateForm(formClass, tabControl1);
         }
 
         public void GenerateForm(string form,object sender)
@@ -41,25 +34,23 @@ namespace tqToolBox
             s[((TabControl)sender).SelectedIndex] = 1;
         }
 
-        private void fntControl_SelectedIndexChanged(object sender,EventArgs e)
-        {
-            if(s[tabControl1.SelectedIndex] == 0) //只生成一次 防止多次生成
-            {
-                btnX_Click(sender, e);
-            }
-        }
-
         /// <summary>
         /// 通用按钮点击选项卡 在选项卡上显示对应的窗体
         /// </summary>
         private void btnX_Click(object sender, EventArgs e)
         {
             string formClass = ((TabControl)sender).SelectedTab.Tag.ToString();
-
-            //string form = tabControl1.SelectedTab.Tag.ToString();
-
             GenerateForm(formClass, sender);
+        }
 
+        private void btnClickHandler(object serder,EventArgs e)
+        {
+            Button btn = (Button)serder;
+            if (btn == btn_fnt)
+            {
+                Form myform = new fntTool();
+                myform.ShowDialog();//对话框模式 不能再操作父窗口
+            }
         }
 
     }
