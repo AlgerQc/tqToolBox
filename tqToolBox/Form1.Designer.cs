@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btn_fnt = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // btn_fnt
@@ -58,6 +60,12 @@
             this.button2.Text = "button2";
             this.button2.UseVisualStyleBackColor = true;
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 3000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -79,6 +87,7 @@
 
         private System.Windows.Forms.Button btn_fnt;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 
