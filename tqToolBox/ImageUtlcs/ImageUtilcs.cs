@@ -8,7 +8,7 @@ namespace tqToolBox.ImageUtlcs
     {
         private static Bitmap bigImageMap = new Bitmap(1, 1);
         private static Dictionary<string, Rect> ImageDic = new Dictionary<string, Rect>();//文件名对应的Image对象
-        private static int scatterMaxHeight = 0;
+        private static int scatterMaxHeight = 0;//最高的散图高度
 
         //获取合图的面积
         private static Size GetBigImgSize()

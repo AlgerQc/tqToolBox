@@ -136,6 +136,7 @@ namespace tqToolBox.ImageUtlcs
             SpliceRect bestNode = new SpliceRect();
             bestShortSideFit = Int32.MaxValue;
             bestLongSideFit = Int32.MaxValue;
+            bool is_can_store = false;//能否放下
 
             for (int i = 0; i < freeRectangles.Count; ++i)
             {
@@ -155,8 +156,28 @@ namespace tqToolBox.ImageUtlcs
                         bestNode.height = height;
                         bestShortSideFit = shortSideFit;
                         bestLongSideFit = longSideFit;
+                        is_can_store = true;
                     }
                 }
+            }
+            if (!is_can_store)
+            {
+                //放不下多余的散图，扩充大图面积
+                for (int i = 0; i < freeRectangles.Count; ++i)
+                {
+                    SpliceRect freeRect = (SpliceRect)freeRectangles[i];
+                    if (freeRect.x + freeRect.width >= binWidth)
+                    {
+                        freeRect.width += width;
+                    }
+                    if (freeRect.y + freeRect.height >= binHeight)
+                    {
+                        freeRect.height += height;
+                    }
+                }
+                binWidth += width;
+                binHeight += height;
+                return FindPositionForNewNodeBestLongSideFit(width, height);
             }
             return bestNode;
         }
@@ -292,28 +313,11 @@ namespace tqToolBox.ImageUtlcs
         //获取最小能装下的矩形边长
         public static int MinRectangle(int setArea)
         {
-            //int usedSurfaceArea = 0;
-            //int usedWith = 0;
-            //int userHeight = 0;
-            //for (int i = 0; i < usedRectangles.Count; i++)
-            //{
-            //    SpliceRect userRect = (SpliceRect)usedRectangles[i];
-            //    if (userRect.x + userRect.width > usedWith)
-            //    {
-            //        usedWith = userRect.x + userRect.width;
-            //    }
-            //    if (userRect.y + userRect.height > userHeight)
-            //    {
-            //        userHeight = userRect.y + userRect.height;
-            //    }
-            //}
-            //usedSurfaceArea = usedWith * userHeight;
-            int count = 3;
+            int count = 5;
             int sidelength = 0;
             while (true)
             {
                 sidelength = (int)Math.Pow(2, count);
-                //if (sidelength * sidelength >= usedSurfaceArea)
                 if (sidelength * sidelength >= setArea)
                     break;
                 count++;
