@@ -6,10 +6,9 @@ namespace tqToolBox.ImageUtlcs
 {
     class ImageUtilcs
     {
-        //每张图片之间的间距
-        private static int img_interval = 2;
         private static Bitmap bigImageMap = new Bitmap(1, 1);
         private static Dictionary<string, Rect> ImageDic = new Dictionary<string, Rect>();//文件名对应的Image对象
+        private static int scatterMaxHeight = 0;
 
         //获取合图的面积
         private static Size GetBigImgSize()
@@ -27,8 +26,6 @@ namespace tqToolBox.ImageUtlcs
                     bitMapSize.Height = rect.y + rect.image.Height;
                 }
             }
-            bitMapSize.Width += img_interval * 2;
-            bitMapSize.Height += img_interval * 2;
             return bitMapSize;
         }
         //对图片进行排序，按照面积大小
@@ -53,6 +50,7 @@ namespace tqToolBox.ImageUtlcs
                     if (i == 0)
                     {
                         all_area = all_area + (width * height);
+                        if (height > scatterMaxHeight) scatterMaxHeight = height;
                     }
                 }
                 if (ImageDic.ContainsKey(p_key) == true)
@@ -82,7 +80,7 @@ namespace tqToolBox.ImageUtlcs
         {
             ImageDic.Clear();
             bigImageMap.Dispose();
-            //MaxRectsBinPack.init(128, 128);
+            scatterMaxHeight = 0;
             foreach (string srcfile in files)
             {
                 //判断是否为文件
@@ -94,9 +92,6 @@ namespace tqToolBox.ImageUtlcs
                     if (ImageDic.ContainsKey(strFileName) == false)
                     {
                         rect.SetImage(img);
-                        //Size newRect = MaxRectsBinPack.Insert(img.Width, img.Height);
-                        //rect.x = newRect.Width;
-                        //rect.y = newRect.Height;
                         ImageDic.Add(strFileName, rect);
                     }
                     else
@@ -120,7 +115,7 @@ namespace tqToolBox.ImageUtlcs
                 Bitmap map1 = new Bitmap(dic.Value.image);
                 Size newRect = MaxRectsBinPack.Insert(dic.Value.image.Width, dic.Value.image.Height);
 
-                g1.DrawImage(map1, dic.Value.x + img_interval, dic.Value.y + img_interval, dic.Value.image.Width, dic.Value.image.Height);
+                g1.DrawImage(map1, dic.Value.x, dic.Value.y, dic.Value.image.Width, dic.Value.image.Height);
                 map1.Dispose();
             }
             g1.Dispose();
@@ -135,9 +130,9 @@ namespace tqToolBox.ImageUtlcs
             //文件写入
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(path + @"\\" + fontName + @".fnt"))
             {
-                string one_line = "info face = \"Arial\" size = 32 bold = 0 italic = 0 charset = \"\" unicode = 1 stretchH = 100 smooth = 1 aa = 1 padding = 0,0,0,0 spacing = 1,1 outline = 0";
+                string one_line = "info face=\"Arial\" size=" + scatterMaxHeight + " bold=0 italic=0 charset=\"\" unicode=1 stretchH =100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1 outline=0";
                 file.WriteLine(one_line);
-                string two_line = @"common lineHeight=32 base=26 scaleW=256 scaleH=256 pages=1 packed=0 alphaChnl=1 redChnl=0 greenChnl=0 blueChnl=0";
+                string two_line = @"common lineHeight=" + scatterMaxHeight + " base=26 scaleW=" + bigImageMap.Width + " scaleH=" + bigImageMap.Height + " pages=1 packed=0 alphaChnl=1 redChnl=0 greenChnl=0 blueChnl=0";
                 file.WriteLine(two_line);
                 string three_line = "page id=0 file=\"" + fontName + ".png\"";
                 file.WriteLine(three_line);
