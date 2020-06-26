@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Drawing;
+using tqToolBox.Generator;
 
 namespace tqToolBox.ImageUtlcs
 {
-    class SpliceRect
+    public class SpliceRect
     {
         public int x;
         public int y;
@@ -48,8 +49,8 @@ namespace tqToolBox.ImageUtlcs
             Size psize = new Size();
             //TODO 暂时只完成一种算法
             //newNode = FindPositionForNewNodeBestShortSideFit(width, height);
-            //newNode = FindPositionForNewNodeBestLongSideFit(width, height);
-            newNode = FindPositionForNewNodeContactPoint(width, height);
+            newNode = FindPositionForNewNodeBestLongSideFit(width, height);
+            //newNode = FindPositionForNewNodeContactPoint(width, height);
 
             if (newNode.height == 0)
                 return psize;
@@ -77,6 +78,7 @@ namespace tqToolBox.ImageUtlcs
         private static SpliceRect FindPositionForNewNodeBestShortSideFit(int width, int height)
         {
             SpliceRect bestNode = new SpliceRect();
+            bool is_can_store = false;//能否放下
 
             int bestShortSideFit = System.Int32.MaxValue;
             int bestLongSideFit = System.Int32.MaxValue;
@@ -102,9 +104,29 @@ namespace tqToolBox.ImageUtlcs
                         bestNode.height = height;
                         bestShortSideFit = shortSideFit;
                         bestLongSideFit = longSideFit;
+                        is_can_store = true;
                     }
-
                 }
+            }
+
+            if (!is_can_store)
+            {
+                //放不下多余的散图，扩充大图面积
+                for (int i = 0; i < freeRectangles.Count; ++i)
+                {
+                    SpliceRect freeRect = (SpliceRect)freeRectangles[i];
+                    if (freeRect.x + freeRect.width >= binWidth)
+                    {
+                        freeRect.width += width;
+                    }
+                    if (freeRect.y + freeRect.height >= binHeight)
+                    {
+                        freeRect.height += height;
+                    }
+                }
+                binWidth += width;
+                binHeight += height;
+                return FindPositionForNewNodeBestShortSideFit(width, height);
             }
             return bestNode;
         }
@@ -201,12 +223,8 @@ namespace tqToolBox.ImageUtlcs
                 //判断为填充区域下方能否切割
                 if (usedNode.y > freeNode.y && usedNode.y < freeNode.y + freeNode.height)
                 {
-                    SpliceRect newNode = new SpliceRect();
-                    newNode.x = freeNode.x;
-                    newNode.y = freeNode.y;
-                    newNode.width = freeNode.width;
-                    newNode.height = freeNode.height;
-                    //newNode = freeNode;
+                    SpliceRect newNode = Utlcs.Clone(freeNode);
+
                     newNode.height = usedNode.y - newNode.y;
                     freeRectangles.Add(newNode);
                 }
@@ -214,12 +232,9 @@ namespace tqToolBox.ImageUtlcs
                 //判断为填充区域上方能否切割
                 if (usedNode.y + usedNode.height < freeNode.y + freeNode.height)
                 {
-                    SpliceRect newNode = new SpliceRect();
-                    newNode.x = freeNode.x;
-                    newNode.y = freeNode.y;
-                    newNode.width = freeNode.width;
-                    newNode.height = freeNode.height;
-                    //newNode = freeNode;
+
+                    SpliceRect newNode = Utlcs.Clone(freeNode);
+
                     newNode.y = usedNode.y + usedNode.height;
                     newNode.height = freeNode.y + freeNode.height - (usedNode.y + usedNode.height);
                     freeRectangles.Add(newNode);
@@ -230,24 +245,17 @@ namespace tqToolBox.ImageUtlcs
                 // New node at the left side of the used node.
                 if (usedNode.x > freeNode.x && usedNode.x < freeNode.x + freeNode.width)
                 {
-                    SpliceRect newNode = new SpliceRect();
-                    newNode.x = freeNode.x;
-                    newNode.y = freeNode.y;
-                    newNode.width = freeNode.width;
-                    newNode.height = freeNode.height;
-                    //newNode = freeNode;
+
+                    SpliceRect newNode = Utlcs.Clone(freeNode);
+
                     newNode.width = usedNode.x - newNode.x;
                     freeRectangles.Add(newNode);
                 }
                 // New node at the right side of the used node.
                 if (usedNode.x + usedNode.width < freeNode.x + freeNode.width)
                 {
-                    SpliceRect newNode = new SpliceRect();
-                    newNode.x = freeNode.x;
-                    newNode.y = freeNode.y;
-                    newNode.width = freeNode.width;
-                    newNode.height = freeNode.height;
-                    //newNode = freeNode;
+                    SpliceRect newNode = Utlcs.Clone(freeNode);
+
                     newNode.x = usedNode.x + usedNode.width;
                     newNode.width = freeNode.x + freeNode.width - (usedNode.x + usedNode.width);
                     freeRectangles.Add(newNode);
@@ -281,6 +289,37 @@ namespace tqToolBox.ImageUtlcs
         {
             return a.x >= b.x && a.y >= b.y && a.x + a.width <= b.x + b.width && a.y + a.height <= b.y + b.height;
         }
-
+        //获取最小能装下的矩形边长
+        public static int MinRectangle(int setArea)
+        {
+            //int usedSurfaceArea = 0;
+            //int usedWith = 0;
+            //int userHeight = 0;
+            //for (int i = 0; i < usedRectangles.Count; i++)
+            //{
+            //    SpliceRect userRect = (SpliceRect)usedRectangles[i];
+            //    if (userRect.x + userRect.width > usedWith)
+            //    {
+            //        usedWith = userRect.x + userRect.width;
+            //    }
+            //    if (userRect.y + userRect.height > userHeight)
+            //    {
+            //        userHeight = userRect.y + userRect.height;
+            //    }
+            //}
+            //usedSurfaceArea = usedWith * userHeight;
+            int count = 3;
+            int sidelength = 0;
+            while (true)
+            {
+                sidelength = (int)Math.Pow(2, count);
+                //if (sidelength * sidelength >= usedSurfaceArea)
+                if (sidelength * sidelength >= setArea)
+                    break;
+                count++;
+            }
+            init(sidelength, sidelength);
+            return sidelength;
+        }
     }
 }

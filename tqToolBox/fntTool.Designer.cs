@@ -35,11 +35,16 @@
             this.txtbox_name = new System.Windows.Forms.TextBox();
             this.btn_selectsite = new System.Windows.Forms.Button();
             this.btn_export = new System.Windows.Forms.Button();
-            this.imglist = new System.Windows.Forms.ImageList(this.components);
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.listhead_0 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.p_imglist = new System.Windows.Forms.ImageList(this.components);
+            this.listView_image = new System.Windows.Forms.ListView();
+            this.listhead_1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.listhead_2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.listhead_3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.listhead_4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.pictureBox = new System.Windows.Forms.PictureBox();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -108,38 +113,71 @@
             this.btn_export.UseVisualStyleBackColor = true;
             this.btn_export.Click += new System.EventHandler(this.btn_export_Click);
             // 
-            // imglist
+            // p_imglist
             // 
-            this.imglist.ColorDepth = System.Windows.Forms.ColorDepth.Depth4Bit;
-            this.imglist.ImageSize = new System.Drawing.Size(16, 16);
-            this.imglist.TransparentColor = System.Drawing.Color.Transparent;
+            this.p_imglist.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.p_imglist.ImageSize = new System.Drawing.Size(16, 16);
+            this.p_imglist.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // listView1
+            // listView_image
             // 
-            this.listView1.AllowDrop = true;
-            this.listView1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.listhead_0});
-            this.listView1.FullRowSelect = true;
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(17, 103);
-            this.listView1.MultiSelect = false;
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(378, 317);
-            this.listView1.SmallImageList = this.imglist;
-            this.listView1.TabIndex = 6;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView_image.AllowDrop = true;
+            this.listView_image.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.listView_image.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.listhead_1,
+            this.listhead_2,
+            this.listhead_3,
+            this.listhead_4});
+            this.listView_image.FullRowSelect = true;
+            this.listView_image.HideSelection = false;
+            this.listView_image.Location = new System.Drawing.Point(17, 103);
+            this.listView_image.MultiSelect = false;
+            this.listView_image.Name = "listView_image";
+            this.listView_image.Size = new System.Drawing.Size(378, 317);
+            this.listView_image.SmallImageList = this.p_imglist;
+            this.listView_image.TabIndex = 6;
+            this.listView_image.UseCompatibleStateImageBehavior = false;
+            this.listView_image.View = System.Windows.Forms.View.Details;
+            this.listView_image.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListColumnWidthChanging);
+            this.listView_image.DragDrop += new System.Windows.Forms.DragEventHandler(this.ListViweDragDrop);
+            this.listView_image.DragEnter += new System.Windows.Forms.DragEventHandler(this.FileDragEnter);
             // 
-            // listhead_0
+            // listhead_1
             // 
-            this.listhead_0.Text = "预览";
+            this.listhead_1.Text = "原图预览";
+            this.listhead_1.Width = 90;
+            // 
+            // listhead_2
+            // 
+            this.listhead_2.Text = "类型";
+            this.listhead_2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // listhead_3
+            // 
+            this.listhead_3.Text = "大小";
+            this.listhead_3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // listhead_4
+            // 
+            this.listhead_4.Text = "字符(默认第一个字符)";
+            this.listhead_4.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.listhead_4.Width = 150;
+            // 
+            // pictureBox
+            // 
+            this.pictureBox.Location = new System.Drawing.Point(428, 162);
+            this.pictureBox.Name = "pictureBox";
+            this.pictureBox.Size = new System.Drawing.Size(200, 200);
+            this.pictureBox.TabIndex = 7;
+            this.pictureBox.TabStop = false;
             // 
             // fntTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(650, 432);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.pictureBox);
+            this.Controls.Add(this.listView_image);
             this.Controls.Add(this.btn_export);
             this.Controls.Add(this.btn_selectsite);
             this.Controls.Add(this.txtbox_name);
@@ -148,6 +186,7 @@
             this.Controls.Add(label1);
             this.Name = "fntTool";
             this.Text = "fntTool";
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -158,8 +197,12 @@
         private System.Windows.Forms.TextBox txtbox_name;
         private System.Windows.Forms.Button btn_selectsite;
         private System.Windows.Forms.Button btn_export;
-        private System.Windows.Forms.ImageList imglist;
-        private System.Windows.Forms.ListView listView1;
-        private System.Windows.Forms.ColumnHeader listhead_0;
+        private System.Windows.Forms.ImageList p_imglist;
+        private System.Windows.Forms.ListView listView_image;
+        private System.Windows.Forms.ColumnHeader listhead_1;
+        private System.Windows.Forms.ColumnHeader listhead_2;
+        private System.Windows.Forms.ColumnHeader listhead_3;
+        private System.Windows.Forms.ColumnHeader listhead_4;
+        private System.Windows.Forms.PictureBox pictureBox;
     }
 }

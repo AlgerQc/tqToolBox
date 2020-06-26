@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace tqToolBox.ImageUtlcs
 {
@@ -35,12 +31,58 @@ namespace tqToolBox.ImageUtlcs
             bitMapSize.Height += img_interval * 2;
             return bitMapSize;
         }
+        //对图片进行排序，按照面积大小
+        private static void DicSortInArea()
+        {
+            Dictionary<string, Rect> NewImageDic = new Dictionary<string, Rect>();//文件名对应的Image对象
+            int imgCount = ImageDic.Count;
+            int all_area = 0;
+            for(int i= 0; i < imgCount; i++)
+            {
+                string p_key = "";
+                int p_area = 0;
+                foreach (KeyValuePair<string, Rect> dic in ImageDic)  //取出每一张图片
+                {
+                    int width = dic.Value.image.Width;
+                    int height = dic.Value.image.Height;
+                    if(p_area < width * height)
+                    {
+                        p_area = width * height;
+                        p_key = dic.Key;
+                    }
+                    if (i == 0)
+                    {
+                        all_area = all_area + (width * height);
+                    }
+                }
+                if (ImageDic.ContainsKey(p_key) == true)
+                {
+                    NewImageDic.Add(p_key, ImageDic[p_key]);
+                    ImageDic.Remove(p_key);
+                }
+            }
+            MaxRectsBinPack.MinRectangle(all_area);
+            ImageDic.Clear();
+            ImageDic = NewImageDic;
+        }
+
+        //设置每一张图片所在的位置
+        private static void SetImagesPoint()
+        {
+            DicSortInArea();
+            foreach (KeyValuePair<string, Rect> dic in ImageDic)  //取出每一张图片的key
+            {
+                Size newRect = MaxRectsBinPack.Insert(dic.Value.image.Width, dic.Value.image.Height);
+                ImageDic[dic.Key].x = newRect.Width;
+                ImageDic[dic.Key].y = newRect.Height;
+            }
+        }
 
         public static Bitmap CombinImage(string[] files)
         {
             ImageDic.Clear();
             bigImageMap.Dispose();
-            MaxRectsBinPack.init(4096, 4096);
+            //MaxRectsBinPack.init(128, 128);
             foreach (string srcfile in files)
             {
                 //判断是否为文件
@@ -52,9 +94,9 @@ namespace tqToolBox.ImageUtlcs
                     if (ImageDic.ContainsKey(strFileName) == false)
                     {
                         rect.SetImage(img);
-                        Size newRect = MaxRectsBinPack.Insert(img.Width, img.Height);
-                        rect.x = newRect.Width;
-                        rect.y = newRect.Height;
+                        //Size newRect = MaxRectsBinPack.Insert(img.Width, img.Height);
+                        //rect.x = newRect.Width;
+                        //rect.y = newRect.Height;
                         ImageDic.Add(strFileName, rect);
                     }
                     else
@@ -65,6 +107,7 @@ namespace tqToolBox.ImageUtlcs
                     }
                 }
             }
+            SetImagesPoint();
             Size bitMapSize = GetBigImgSize();
             Bitmap bitmap = new Bitmap(bitMapSize.Width, bitMapSize.Height);
             //// 初始化画板
@@ -72,10 +115,11 @@ namespace tqToolBox.ImageUtlcs
             // 将画布涂为透明
             Brush brush = new SolidBrush(Color.FromArgb(0, 255, 255, 255));
             g1.FillRectangle(brush, new Rectangle(0, 0, bitMapSize.Width, bitMapSize.Height));
-
             foreach (KeyValuePair<string, Rect> dic in ImageDic)
             {
                 Bitmap map1 = new Bitmap(dic.Value.image);
+                Size newRect = MaxRectsBinPack.Insert(dic.Value.image.Width, dic.Value.image.Height);
+
                 g1.DrawImage(map1, dic.Value.x + img_interval, dic.Value.y + img_interval, dic.Value.image.Width, dic.Value.image.Height);
                 map1.Dispose();
             }
@@ -110,7 +154,6 @@ namespace tqToolBox.ImageUtlcs
                     file.WriteLine(str);
                 }
             }
-
         }
     }
 }
