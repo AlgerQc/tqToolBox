@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
@@ -9,6 +10,7 @@ namespace tqToolBox.ImageUtlcs
         private static Bitmap bigImageMap = new Bitmap(1, 1);
         private static Dictionary<string, Rect> ImageDic = new Dictionary<string, Rect>();//文件名对应的Image对象
         private static int scatterMaxHeight = 0;//最高的散图高度
+        private static bool is_repetition = false;
 
         //获取合图的面积
         private static Size GetBigImgSize()
@@ -76,11 +78,13 @@ namespace tqToolBox.ImageUtlcs
             }
         }
 
-        public static Bitmap CombinImage(string[] files)
+        public static Bitmap CombinImage(ArrayList files, ArrayList fntFonts)
         {
             ImageDic.Clear();
             bigImageMap.Dispose();
             scatterMaxHeight = 0;
+            is_repetition = false;
+            int index = 0;
             foreach (string srcfile in files)
             {
                 //判断是否为文件
@@ -89,17 +93,20 @@ namespace tqToolBox.ImageUtlcs
                     Rect rect = new Rect();
                     Image img = Image.FromFile(srcfile);
                     string strFileName = System.IO.Path.GetFileName(srcfile);//获取文件名
-                    if (ImageDic.ContainsKey(strFileName) == false)
+                    string str = fntFonts[index].ToString();
+                    if (ImageDic.ContainsKey(str) == false)
                     {
                         rect.SetImage(img);
-                        ImageDic.Add(strFileName, rect);
+                        ImageDic.Add(str, rect);
                     }
                     else
                     {
-                        System.Windows.Forms.MessageBox.Show("文件名重复！！");
-                        Bitmap bitMap = new Bitmap(0, 0);
+                        System.Windows.Forms.MessageBox.Show("导出字符重复！！");
+                        is_repetition = true;
+                        Bitmap bitMap = new Bitmap(1, 1);
                         return bitMap;
                     }
+                    index++;
                 }
             }
             SetImagesPoint();
@@ -126,6 +133,12 @@ namespace tqToolBox.ImageUtlcs
 
         public static void SaveFntFont(string fontName, string path)
         {
+            if (is_repetition)
+            {
+                System.Windows.Forms.MessageBox.Show("有字符重复！！");
+                return;
+            }
+
             bigImageMap.Save(path + @"\\" + fontName + @".png", System.Drawing.Imaging.ImageFormat.Png);
             //文件写入
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(path + @"\\" + fontName + @".fnt"))

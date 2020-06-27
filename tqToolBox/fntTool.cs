@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -8,6 +9,9 @@ namespace tqToolBox
 {
     public partial class fntTool : Form
     {
+        private static ArrayList fntFontList = new ArrayList();
+        private static ArrayList filesList = new ArrayList();
+        private static int select_index = 0;
         public fntTool()
         {
             InitializeComponent();
@@ -17,15 +21,17 @@ namespace tqToolBox
         {
             string str_path = txtbox_exportpath.Text;
             string str_fileName = txtbox_name.Text;
+
+            if(lab_preview.Text == "字符重复")
+            {
+                MessageBox.Show("字符重复");
+                return;
+            }
+
             if (string.IsNullOrEmpty(str_path) || string.IsNullOrEmpty(str_fileName))
-            {
                 MessageBox.Show("请填写必要信息");
-            }
             else
-            {
-                //TODO 保存信息
-                ImageUtilcs.SaveFntFont(str_fileName, str_path);
-            }
+                ImageUtilcs.SaveFntFont(str_fileName, str_path); //保存信息
         }
 
         private void FileDragEnter(object sender, DragEventArgs e)
@@ -66,6 +72,18 @@ namespace tqToolBox
             listView_image.LargeImageList = p_imglist;
             listView_image.SmallImageList = p_imglist;
             listView_image.StateImageList = p_imglist;
+            fntFontList.Clear();
+            filesList.Clear();
+        }
+        //更新预览合图
+        private void UpdatePictureBox(ArrayList files, ArrayList fntFont)
+        {
+            lab_preview.Text = "合图预览";
+            Bitmap bitmap = ImageUtilcs.CombinImage(files, fntFont); //获取合图
+            Image img = Image.FromHbitmap(bitmap.GetHbitmap());
+            pictureBox.Image = img;
+            pictureBox.Show();
+            pictureBox.Refresh();
         }
 
         private void ListViweDragDrop(object sender, DragEventArgs e)
@@ -92,21 +110,55 @@ namespace tqToolBox
                         string strFileName = System.IO.Path.GetFileName(srcfile);//获取文件名
                         viewItem.SubItems.Add(strFileName.Substring(0, 1));
                         listView_image.Items.Add(viewItem);
+                        fntFontList.Add(strFileName.Substring(0, 1));
+                        filesList.Add(srcfile);
                         image.Dispose();
                     }
                 }
                 listView_image.EndUpdate(); //结束数据处理，UI界面一次性绘制。
-                Bitmap bitmap = ImageUtilcs.CombinImage(files); //获取
-                Image img = Image.FromHbitmap(bitmap.GetHbitmap());
-                pictureBox.Image = img;
-                pictureBox.Show();
-                pictureBox.Refresh();
+                if (arrListHaveEqualFont(fntFontList))
+                    lab_preview.Text = "字符重复";
+                else
+                    UpdatePictureBox(filesList, fntFontList);
+
             }
             catch (Exception e1)
             {
                 MessageBox.Show(e1.Message, " Error ",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+        //list item选中事件
+        private void ListViweItemSelectChangeHandler(object sender, EventArgs e)
+        {
+            if (listView_image.SelectedItems.Count == 0) return;
+            textBox_font.Text = listView_image.SelectedItems[0].SubItems[3].Text;
+            select_index = listView_image.SelectedItems[0].Index;
+        }
+        //输入完成事件
+        private void TextBoxValidated(object sender, EventArgs e)
+        {
+            listView_image.Items[select_index].SubItems[3].Text = textBox_font.Text;
+            fntFontList[select_index] = textBox_font.Text;
+            if (arrListHaveEqualFont(fntFontList) == false)
+                UpdatePictureBox(filesList, fntFontList);
+            else
+                lab_preview.Text = "字符重复";
+        }
+        //判断是否有导出相同的字体
+        private bool arrListHaveEqualFont(ArrayList arrayList)
+        {
+            for (int j = 0; j < arrayList.Count; j++)
+            {
+                string str1 = arrayList[j].ToString();
+                for (int i = j+1; i< arrayList.Count;i++)
+                {
+                    string str2 = arrayList[i].ToString();
+                    if (String.Compare(str1, str2) == 0)
+                        return true;
+                }
+            }
+            return false;
         }
     }
 }

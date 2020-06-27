@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label label1;
             System.Windows.Forms.Label label2;
+            System.Windows.Forms.Label label_font;
             this.txtbox_exportpath = new System.Windows.Forms.TextBox();
             this.txtbox_name = new System.Windows.Forms.TextBox();
             this.btn_selectsite = new System.Windows.Forms.Button();
@@ -42,8 +43,11 @@
             this.listhead_3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listhead_4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.textBox_font = new System.Windows.Forms.TextBox();
+            this.lab_preview = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
             label2 = new System.Windows.Forms.Label();
+            label_font = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -74,7 +78,7 @@
             this.txtbox_exportpath.Location = new System.Drawing.Point(90, 25);
             this.txtbox_exportpath.Multiline = true;
             this.txtbox_exportpath.Name = "txtbox_exportpath";
-            this.txtbox_exportpath.Size = new System.Drawing.Size(479, 21);
+            this.txtbox_exportpath.Size = new System.Drawing.Size(479, 25);
             this.txtbox_exportpath.TabIndex = 2;
             this.txtbox_exportpath.WordWrap = false;
             this.txtbox_exportpath.DragDrop += new System.Windows.Forms.DragEventHandler(this.TxtboxExportPathSiteDragDrop);
@@ -83,10 +87,11 @@
             // txtbox_name
             // 
             this.txtbox_name.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtbox_name.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.txtbox_name.Location = new System.Drawing.Point(90, 62);
             this.txtbox_name.Multiline = true;
             this.txtbox_name.Name = "txtbox_name";
-            this.txtbox_name.Size = new System.Drawing.Size(277, 21);
+            this.txtbox_name.Size = new System.Drawing.Size(277, 25);
             this.txtbox_name.TabIndex = 3;
             // 
             // btn_selectsite
@@ -139,6 +144,7 @@
             this.listView_image.UseCompatibleStateImageBehavior = false;
             this.listView_image.View = System.Windows.Forms.View.Details;
             this.listView_image.ColumnWidthChanging += new System.Windows.Forms.ColumnWidthChangingEventHandler(this.ListColumnWidthChanging);
+            this.listView_image.SelectedIndexChanged += new System.EventHandler(this.ListViweItemSelectChangeHandler);
             this.listView_image.DragDrop += new System.Windows.Forms.DragEventHandler(this.ListViweDragDrop);
             this.listView_image.DragEnter += new System.Windows.Forms.DragEventHandler(this.FileDragEnter);
             // 
@@ -165,17 +171,50 @@
             // 
             // pictureBox
             // 
-            this.pictureBox.Location = new System.Drawing.Point(428, 162);
+            this.pictureBox.Location = new System.Drawing.Point(428, 135);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(200, 200);
             this.pictureBox.TabIndex = 7;
             this.pictureBox.TabStop = false;
+            // 
+            // textBox_font
+            // 
+            this.textBox_font.Location = new System.Drawing.Point(469, 395);
+            this.textBox_font.MaxLength = 1;
+            this.textBox_font.Multiline = true;
+            this.textBox_font.Name = "textBox_font";
+            this.textBox_font.Size = new System.Drawing.Size(100, 25);
+            this.textBox_font.TabIndex = 8;
+            this.textBox_font.Validated += new System.EventHandler(this.TextBoxValidated);
+            // 
+            // label_font
+            // 
+            label_font.AutoSize = true;
+            label_font.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            label_font.Location = new System.Drawing.Point(483, 370);
+            label_font.Name = "label_font";
+            label_font.Size = new System.Drawing.Size(72, 16);
+            label_font.TabIndex = 9;
+            label_font.Text = "导出字符";
+            // 
+            // lab_preview
+            // 
+            this.lab_preview.AutoSize = true;
+            this.lab_preview.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lab_preview.Location = new System.Drawing.Point(483, 103);
+            this.lab_preview.Name = "lab_preview";
+            this.lab_preview.Size = new System.Drawing.Size(72, 16);
+            this.lab_preview.TabIndex = 10;
+            this.lab_preview.Text = "合图预览";
             // 
             // fntTool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(650, 432);
+            this.Controls.Add(this.lab_preview);
+            this.Controls.Add(label_font);
+            this.Controls.Add(this.textBox_font);
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.listView_image);
             this.Controls.Add(this.btn_export);
@@ -184,6 +223,7 @@
             this.Controls.Add(this.txtbox_exportpath);
             this.Controls.Add(label2);
             this.Controls.Add(label1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "fntTool";
             this.Text = "fntTool";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
@@ -204,5 +244,7 @@
         private System.Windows.Forms.ColumnHeader listhead_3;
         private System.Windows.Forms.ColumnHeader listhead_4;
         private System.Windows.Forms.PictureBox pictureBox;
+        private System.Windows.Forms.TextBox textBox_font;
+        private System.Windows.Forms.Label lab_preview;
     }
 }
