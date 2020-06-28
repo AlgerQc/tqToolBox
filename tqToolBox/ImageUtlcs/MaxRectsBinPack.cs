@@ -17,6 +17,7 @@ namespace tqToolBox.ImageUtlcs
     {
         private static int binWidth = 0;
         private static int binHeight = 0;
+        private static int interval = 2;
         private static ArrayList usedRectangles = new ArrayList();//已经添加的矩形
         private static ArrayList freeRectangles = new ArrayList();//剩余面积
         public static void init(int width, int height)
@@ -141,7 +142,8 @@ namespace tqToolBox.ImageUtlcs
             for (int i = 0; i < freeRectangles.Count; ++i)
             {
                 SpliceRect freeRect = (SpliceRect)freeRectangles[i];
-                if (freeRect.width >= width && freeRect.height >= height)
+                //最后一个区域不需要加间距（每个计算间距防止图片切割错误）
+                if (freeRect.width >= width + interval && freeRect.height >= height)
                 {
                     int leftoverHoriz = Math.Abs(freeRect.width - width);
                     int leftoverVert = Math.Abs(freeRect.height - height);
@@ -157,6 +159,11 @@ namespace tqToolBox.ImageUtlcs
                         bestShortSideFit = shortSideFit;
                         bestLongSideFit = longSideFit;
                         is_can_store = true;
+
+                        if(bestNode.x > 0)
+                            bestNode.x += interval;
+                        if (bestNode.y > 0)
+                            bestNode.y += interval;
                     }
                 }
             }
