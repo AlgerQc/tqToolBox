@@ -12,6 +12,13 @@ namespace tqToolBox.ImageUtlcs
         private static int scatterMaxHeight = 0;//最高的散图高度
         private static bool is_repetition = false;
 
+        public static void Dispose()
+        {
+            ImageDic.Clear();
+            scatterMaxHeight = 0;
+            MaxRectsBinPack.ClearBinPack();
+        }
+
         //获取合图的面积
         private static Size GetBigImgSize()
         {

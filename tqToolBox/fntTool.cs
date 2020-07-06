@@ -37,7 +37,7 @@ namespace tqToolBox
         private void FileDragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                e.Effect = DragDropEffects.All;  //表明是所有类型的数据，比如文件路径
+                e.Effect = DragDropEffects.Copy;  //表明是所有类型的数据，比如文件路径
             else
                 e.Effect = DragDropEffects.None;
         }
@@ -159,6 +159,17 @@ namespace tqToolBox
                 }
             }
             return false;
+        }
+
+        private void PanelCloseHandler(object sender, FormClosedEventArgs e)
+        {
+            init();
+            ImageUtilcs.Dispose();
+            listView_image.Dispose();
+            pictureBox.Dispose();
+            p_imglist.Dispose();
+            this.Dispose();
+            this.Close();
         }
     }
 }

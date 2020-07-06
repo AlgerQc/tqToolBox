@@ -71,6 +71,16 @@
             label2.TabIndex = 1;
             label2.Text = "文件名";
             // 
+            // label_font
+            // 
+            label_font.AutoSize = true;
+            label_font.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            label_font.Location = new System.Drawing.Point(483, 370);
+            label_font.Name = "label_font";
+            label_font.Size = new System.Drawing.Size(72, 16);
+            label_font.TabIndex = 9;
+            label_font.Text = "导出字符";
+            // 
             // txtbox_exportpath
             // 
             this.txtbox_exportpath.AllowDrop = true;
@@ -187,16 +197,6 @@
             this.textBox_font.TabIndex = 8;
             this.textBox_font.Validated += new System.EventHandler(this.TextBoxValidated);
             // 
-            // label_font
-            // 
-            label_font.AutoSize = true;
-            label_font.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            label_font.Location = new System.Drawing.Point(483, 370);
-            label_font.Name = "label_font";
-            label_font.Size = new System.Drawing.Size(72, 16);
-            label_font.TabIndex = 9;
-            label_font.Text = "导出字符";
-            // 
             // lab_preview
             // 
             this.lab_preview.AutoSize = true;
@@ -226,6 +226,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "fntTool";
             this.Text = "fntTool";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.PanelCloseHandler);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
