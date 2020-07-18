@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Forms;
+using tqToolBox.Forms;
 
 namespace tqToolBox
 {
@@ -43,13 +44,17 @@ namespace tqToolBox
             GenerateForm(formClass, sender);
         }
 
-        private void btnClickHandler(object serder,EventArgs e)
+        private void btnClickHandler(object sender, EventArgs e)
         {
-            Button btn = (Button)serder;
+            Button btn = (Button)sender;
             if (btn == btn_fnt)
             {
                 Form myform = new fntTool();
                 myform.ShowDialog();//对话框模式 不能再操作父窗口
+            } else if (btn == btn_excelToJson)
+            {
+                Form myform = new ExcelToJson();
+                myform.ShowDialog();
             }
         }
 

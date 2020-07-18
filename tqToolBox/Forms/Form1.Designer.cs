@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.btn_fnt = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btn_excelToJson = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
@@ -48,17 +48,18 @@
             this.btn_fnt.UseVisualStyleBackColor = true;
             this.btn_fnt.MouseClick += new System.Windows.Forms.MouseEventHandler(this.btnClickHandler);
             // 
-            // button2
+            // btn_excelToJson
             // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.btn_excelToJson.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(254, 8);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(230, 140);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btn_excelToJson.Location = new System.Drawing.Point(254, 8);
+            this.btn_excelToJson.Name = "btn_excelToJson";
+            this.btn_excelToJson.Size = new System.Drawing.Size(230, 140);
+            this.btn_excelToJson.TabIndex = 1;
+            this.btn_excelToJson.Text = "ExcelToJson";
+            this.btn_excelToJson.UseVisualStyleBackColor = true;
+            this.btn_excelToJson.MouseClick += new System.Windows.Forms.MouseEventHandler(this.btnClickHandler);
             // 
             // timer1
             // 
@@ -71,11 +72,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.ClientSize = new System.Drawing.Size(497, 156);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.btn_excelToJson);
             this.Controls.Add(this.btn_fnt);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
-            this.MinimizeBox = false;
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -86,7 +86,7 @@
         #endregion
 
         private System.Windows.Forms.Button btn_fnt;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btn_excelToJson;
         private System.Windows.Forms.Timer timer1;
     }
 }
