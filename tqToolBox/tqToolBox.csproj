@@ -80,6 +80,7 @@
     <Compile Include="Forms\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Generator\PublicModel.cs" />
     <Compile Include="Generator\Utlcs.cs" />
     <Compile Include="ImageUtlcs\ImageUtilcs.cs" />
     <Compile Include="ImageUtlcs\MaxRectsBinPack.cs" />
